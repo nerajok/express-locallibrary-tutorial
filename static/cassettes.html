@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="utf-8">
+    <title>Cassettes demo</title>
+    <script
+        src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous">
+    </script>
+    <link rel="stylesheet" type="text/css" href='cassettes.css'>
+</head>
+<body>
+<h1>My totally radical cassette collection, d00d</h1>
+
+<ul id='cassette-list'>
+
+</ul>
+
+<form action='/api/cassettes' method='post'>
+    <label for='add-cassette'>Add some sweet new cassettes, d00d!
+        <input class='myLabels' type="text" id="add-cassette" name="title" minlength="1" maxlength='200' required>
+    </label>
+    <br>
+    <label class='myLabels' for='add-description'>
+        Add a description of the sweet tunes on this cassette.
+        <br>
+        <textarea id='add-description' name='add-description'></textarea>
+    </label>
+    <br>
+    <label class='myLabels'>
+        <input type="submit" name="Sweet!">            
+    </label>
+    
+</form>
+    <script type="text/javascript" src='cassettes.js'></script>
+</body>
+</html>
