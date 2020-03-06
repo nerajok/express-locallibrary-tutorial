@@ -7,9 +7,9 @@ CRUD: Create Read Update Delete
 - collection.insertMany([{...}, ])
 
 MAKE SURE you create a url.js file in the project root!
-MAKE SURE you add 
+MAKE SURE you add
 
-  exports.url = <your mongo url> 
+  exports.url = <your mongo url>
 
 to that file !
 
@@ -18,7 +18,7 @@ to that file !
 const MongoClient = require('mongodb').MongoClient;
 const mongoURL = require('./url');
 
-const collectionName = 'cassettes';
+const collectionName = 'documents';
 
 function writeItem(data) {
     const client = new MongoClient(mongoURL.url, { useNewUrlParser: true });
@@ -31,7 +31,7 @@ function writeItem(data) {
           console.log('Connection error!');
           throw new Error(err);
         }
-        const collection = client.db("test").collection(collectionName);
+        const collection = client.db("fsd").collection(collectionName);
         if (Array.isArray(data)) {
           collection.insertMany(data);
         } else {
@@ -49,7 +49,7 @@ function readItem(callback) {
           console.log('Connection error!');
           throw new Error(err);
         }
-        const collection = client.db("test").collection(collectionName);
+        const collection = client.db("fsd").collection(collectionName);
         return collection.find({}).toArray(callback);
   })
 }
@@ -57,28 +57,42 @@ function readItem(callback) {
 function deleteItem(item) {
   const client = new MongoClient(mongoURL.url, { useNewUrlParser: true });
   client.connect(function(err) {
-    const collection = client.db("test").collection(collectionName);
-    collection.deleteOne(item, function(err, r){
-      if (err) {
-        throw new Error(err)
-      } else {
-        var _id = item._id;
-        console.log(`IO delete finished, using: ${item.title}`);
-      }
-    })
-  })  
+    const collection = client.db("fsd").collection(collectionName);
+
+     collection.deleteOne(item , (err , collection) => {
+  		if(err) throw err;
+  		console.log(collection.result.n + " Record(s) deleted successfully");
+  	});
+
+  })
 }
+
+
+
+  function updateItem(query,data) {
+    //Query parameter is used to search the collection.
+//  var query = { name : "rishabhio" };
+    //And When the query matches the data in the DB , "data" parameter is used to update the value.
+//  var data = { name : "nodejsera.com" , mobile : "1234567890" }
+    //Accessing the collection using nodejs
+
+    const client = new MongoClient(mongoURL.url, { useNewUrlParser: true });
+    client.connect(function(err) {
+      const collection = client.db("fsd").collection(collectionName);
+
+      collection.updateOne(query , data, (err , collection) => {
+    	if(err) throw err;
+    	console.log("Record updated successfully");
+    	//console.log(collection);
+    });
+
+    })
+  }
+
+
+
 
 exports.writeItem = writeItem
 exports.readItem = readItem
 exports.deleteItem = deleteItem
-
-
-
-
-
-
-
-
-
-
+exports.updateItem = updateItem

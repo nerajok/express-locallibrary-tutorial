@@ -1,0 +1,55 @@
+#aside {
+	float: right;
+	width: 20em;
+	height: 10em;
+}
+
+#bigbox {
+	float: left;
+	width: 600px;
+	height: 400px;
+	border-right: 1px dotted;
+}
+
+#overlay {
+    padding: 15%;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    background: white;
+    box-shadow: 10px 10px;
+    padding-bottom: 30%;
+
+
+}
+
+body{
+  background-color: #e5e199;
+}
+
+h1{
+  font-family: "Cabin"
+  text-align: center;
+  border-bottom: 1px dotted;
+}
+
+h2{
+  font-family: "Cabin"
+}
+
+body{
+  font-family: "Merriweather"
+}
+
+
+.footer {
+  position: fixed;
+  border-top: 1px dotted;
+  left: 15em;
+  bottom: 0.5em;
+  width: 100%;
+  text-align: left;
+	clear:both;
+  font-weight: bold;
+}

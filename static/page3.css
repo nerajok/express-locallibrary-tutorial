@@ -1,0 +1,21 @@
+
+#overlay {
+    padding: 15%;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    background: white;
+    box-shadow: 10px 10px;
+    padding-bottom: 30%;
+
+
+}
+
+body{
+  background-color: #e5e199;
+}
+
+#caught{
+    font-weight: bold;
+}

@@ -8,17 +8,18 @@
 const express = require('express');
 const mongoIO = require('./io.js');
 const bodyParser = require('body-parser');
+var ObjectId = require('mongodb').ObjectID;
 
 // Here we *call* the express module, which is one of the first things
 // we need to do to start our express app.
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Here we configure express to serve static files. Notice again, that 
+// Here we configure express to serve static files. Notice again, that
 // we have to *call* express.static, and that the call to express.static
 // is inside app.use -- these are nested calls.
 // https://expressjs.com/en/starter/static-files.html
-var staticPath = 'static'	
+var staticPath = 'static'
 app.use(express.static(staticPath));
 
 // Here we configure express to allow us to access the
@@ -31,16 +32,20 @@ app.use(bodyParser.json())
 // This route just redirects a request to the site's root
 // to the static cassettes.html file.
 app.get('/', function(req, res) {
-    res.redirect('/cassettes.html');
+    res.redirect('/landing.html');
 })
 
+////////////////////////////////////////////////////////////////////
+
+//FOR UPLOAD
+
 // This is the controller that responds to a GET request
-function GetCassetteAPI(req, res, next) {	
-	
+function GetUploadAPI(req, res, next) {
+
 	// This is the callback we pass to mongoIO.readItem
 	// When the Mongo read operation finishes, it will
 	// run our callback, which is:
-	// send the data from Mongo back to the browser as 
+	// send the data from Mongo back to the browser as
 	// JSON, OR handle any errors that come up.
 	function sendDataCallback(err, data) {
         if (data) {
@@ -49,54 +54,70 @@ function GetCassetteAPI(req, res, next) {
             console.log('ouch');
             console.log(err);
             next(err);
-        }		
-	}	
-	// Here we make the call to readItem and pass in the 
+        }
+	}
+	// Here we make the call to readItem and pass in the
 	// callback
-	mongoIO.readItem(sendDataCallback);	
+	mongoIO.readItem(sendDataCallback);
 }
 // This is the route for a GET request
-app.get('/api/cassettes', GetCassetteAPI)
+app.get('/api/upload', GetUploadAPI)
 
 // This is the controller that responds to a POST request
-function PostCassetteAPI(req, res, next) {
+function PostUploadAPI(req, res, next) {
 	console.log(req.body);
 	try{
-		mongoIO.writeItem({'title': req.body.title})	
+    mongoIO.writeItem({'Name': req.body.Name,'Height': req.body.Height,'Weight': req.body.Weight,'url': req.body.url})
 	} catch (err) {
 		next(err);
 	}
-	
-	res.redirect('/cassettes.html');
+
+	res.redirect('/page2.html');
 }
 // This is the route for a POST request
-app.post('/api/cassettes', PostCassetteAPI)
+app.post('/api/upload', PostUploadAPI)
 
 
 // This is the controller that responds to a DELETE request
-function DeleteCassetteAPI(req, res, next) {
+function DeleteUploadAPI(req, res, next) {
 	// NEW
 	try {
-		mongoIO.deleteItem({title: req.body.title})
-		res.send({title: req.body.title});
+		mongoIO.deleteItem({'Name': req.body.Name});
+		res.send({Name: req.body.Name});
 	} catch (err) {
 		next(err);
 	}
 
 }
 // This is the route for a DELETE request
-app.delete('/api/cassettes', DeleteCassetteAPI)
+app.delete('/api/upload', DeleteUploadAPI)
 
-function PantsAPI(req, res, next) {
-	res.json('pants pants pants !!')
+// Update request
+
+function UpdateAPI(req, res, next) {
+	console.log(req.body);
+	try{
+    mongoIO.updateItem({_id: ObjectId(req.body.updateid)},
+                        {$set:{ 'Name': req.body.Name,
+                                'Height': req.body.Height,
+                                'Weight': req.body.Weight,
+                                'url': req.body.url}})
+	} catch (err) {
+    console.log(err);
+		next(err);
+	}
+
+	res.redirect('/page3.html');
 }
+// This is the route for a UPDATE request
+app.post('/api/update', UpdateAPI)
 
-app.get('/pants', PantsAPI)
+////////////////////////////////////////////////////////////////////
 
-// Here we set express up to listen for requests and serve responses. 
+
+// Here we set express up to listen for requests and serve responses.
 // By doing this, we make sure that when we run `$ node cassette-serve` in the
-// command prompt, that command doesn't just run and exit, but rather the 
+// command prompt, that command doesn't just run and exit, but rather the
 // server runs until we stop it. To be more specific, it enters an event loop,
-// where events come in, and it is able to respond to them. 
+// where events come in, and it is able to respond to them.
 app.listen(port, function() {console.log(`Example app listening on port ${port}!`)})
-
